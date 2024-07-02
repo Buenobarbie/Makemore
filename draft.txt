@@ -1,0 +1,84 @@
+- read the dataset of names as a list of strings
+
+
+# Bigram 
+Looking at one character and predicting the next character in the sequence
+
+- Add special chracters to start and end '<S>' '<E>'
+- Create a dictionary to map the occurence of the bigrams
+- Visualize the dictionary sorted descendently
+
+- Store this information in an array. The rows are the first character and the coluns are the second character
+- Crete a torch array int32
+ 
+ - Create a dictionary string to integer: it assigns a number to each character
+
+- Visualize the array with matplot lib
+%matplotlib inline (what does this do?)
+plt.imshow(array)
+
+- Create a disctionary integer to string
+
+- Create new visualization
+import matplotlib.pyplot as plt
+%matplotlib inline
+plt.figure(figsize=(16,16))
+plt.imshow(N,cmap='Blues')
+for i in range(28):
+	for j in range(28):
+		chstr = itos[i] + itos[j]
+		plt.text(j,i,chstr, ha="center", va="bottom", color='gray')
+		plt.text(j,i,N[i,j].item(), ha="center", va="top", color='gray')
+plt.axis('off);
+
+- The special character will be only a dot and get index 0
+
+- Create a probability distribution of each row
+	- Change to float
+	- divide by the sum
+
+- Use torch generator for seed
+- Use torch.multinomial to get samples with replacement
+
+- sample some names 
+
+- Create an array of probabilities
+
+- Attention to broadcasting in tensor operations
+
+## Evaluate the model
+log likelihood is the log of all the probabilities multiplied
+to use it like a loss function the lower it can gets must be zero, so we take the negative of it
+
+the final loss function is usually the nll normalized
+
+### Goal
+Maximize likelihood of the data 
+maximize the log likelihood
+minimize the negative log likelihood
+minimize the average negative log likelihood
+
+- the loss i infinite if the name contain a pair of characters that is not in the training dataset
+- Add count of one to every pair count 
+
+
+# Neural Networl
+## Create training set of bigrams (x,y)
+Apply one hot encode because the number of the index doesn't have a numerical meaning
+Turn 1s into float
+- 27 neurons of input and 27 neurons of output
+- apply exponentiation on each output value 
+- logits = log counts
+- transform ligits into counts and counts into probs
+- the activation function is softmax 
+
+## backward pass
+- set W grad to None
+- loss.backward()
+- W.data += -0.1 * W.gradj
+
+- the expected loss is close to the loss obtained with the bigram method, since no information is being added
+
+## Regularization
+W near zero is equivalent to smoothing
+augment the loss function ading a term relative to W (0.01*W².mean())
